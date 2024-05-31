@@ -3,8 +3,10 @@ package main
 
 import (
 	"html/template"
+	"math/rand"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 type ContactDetails struct {
@@ -13,9 +15,10 @@ type ContactDetails struct {
 }
 
 type FormData struct {
-	Success  bool
-	Messages []string
-	Dada     []string
+	Success   bool
+	Messages  []string
+	Dada      []string
+	PoemTitle string
 }
 
 var Messages []string
@@ -25,6 +28,7 @@ func main() {
 
 	http.HandleFunc("/", formHandler(tmpl))
 
+	// Serve static files
 	http.ListenAndServe(":8090", nil)
 }
 
@@ -55,15 +59,27 @@ func formHandler(tmpl *template.Template) func(w http.ResponseWriter, r *http.Re
 
 		addToMessages(details.Message)
 		dada := createDada(Messages, intVal)
+		poemTitle := getPoemTitle(dada)
 
 		formData := FormData{Success: true,
-			Messages: Messages,
-			Dada:     dada,
+			Messages:  Messages,
+			Dada:      dada,
+			PoemTitle: poemTitle,
 		}
 
 		// tmpl.Execute(w, struct{ Success bool }{true})
 		tmpl.Execute(w, formData)
 	}
+}
+
+func getPoemTitle(dada []string) string {
+	rowToPick := rand.Intn(len(dada))
+
+	row := dada[rowToPick]
+	wordsInRow := strings.Fields(row)
+	wordToPick := rand.Intn(len(wordsInRow))
+	title := wordsInRow[wordToPick]
+	return title
 }
 
 func addToMessages(Message string) {

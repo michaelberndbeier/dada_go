@@ -35,15 +35,6 @@ func createDada(input []string, poetLines int) []string {
 	words := shuffleWords(getWords(sanatizeString(asOneString)))
 	var lines = make([]string, poetLines)
 
-	/*
-		for index, word := range words {
-			lineIndex := index % poetLines
-			lines[lineIndex] = lines[lineIndex] + word + " "
-		}
-		return lines
-
-	*/
-
 	globalWordCount := 0
 	wordCountForLines := getRandomWordCountForLines(poetLines)
 	for currentLine, numWordsForThisLine := range wordCountForLines {
