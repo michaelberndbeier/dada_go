@@ -11,11 +11,6 @@ import (
 	"unicode"
 )
 
-type ContactDetails struct {
-	Message string
-	Lines   int
-}
-
 type FormData struct {
 	Success   bool
 	Messages  []string
