@@ -23,18 +23,60 @@ type FormData struct {
 	PoemTitle string
 }
 
+type ResetData struct {
+	Messages []string
+}
+
+type PoemData struct {
+	Dada      []string
+	PoemTitle string
+}
+
 var Messages []string
 
 //go:embed templates
 var templatesFS embed.FS
 
 func main() {
-	tmpl := template.Must(template.ParseFS(templatesFS, "templates/forms.html"))
+	formsTmpl := template.Must(template.ParseFS(templatesFS, "templates/forms.html"))
+	resetTmpl := template.Must(template.ParseFS(templatesFS, "templates/reset.html"))
+	poemTmpl := template.Must(template.ParseFS(templatesFS, "templates/poem.html"))
 
-	http.HandleFunc("/", formHandler(tmpl))
+	http.HandleFunc("/", formHandler(formsTmpl))
+	http.HandleFunc("/reset", resetHandler(resetTmpl))
+	http.HandleFunc("/poem", poetHandler(poemTmpl))
 
 	// Serve static files
 	http.ListenAndServe(":8090", nil)
+}
+
+func poetHandler(tmpl *template.Template) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		intVal := rand.Intn(10) + 5
+		dada := createDada(Messages, intVal)
+		poemTitle := getPoemTitle(dada)
+
+		poemData := PoemData{
+			Dada:      dada,
+			PoemTitle: poemTitle,
+		}
+
+		tmpl.Execute(w, poemData)
+	}
+
+}
+
+func resetHandler(tmpl *template.Template) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		resetData := ResetData{
+			Messages: Messages,
+		}
+
+		// tmpl.Execute(w, struct{ Success bool }{true})
+		tmpl.Execute(w, resetData)
+	}
 }
 
 func formHandler(tmpl *template.Template) func(w http.ResponseWriter, r *http.Request) {

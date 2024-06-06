@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <head>
     <title>Dada-Collaboration</title>
@@ -67,38 +68,12 @@
 
 </style>
 <!-- forms.html -->
-{{if .Success}}
-<div class="parent">
-<div class="poem">
-    <div class="poemtitle">
-        <h1>{{ .PoemTitle }}</h1>
+<body>
+<div class="headbanner">Schon {{len .Messages}} Nachrichten</div>
+    <div class="headbanner">
+        <h1>Collaborative Dada Poem</h1>
     </div>
-{{range .Dada }}
-<div>{{.}}</div><br/>
-{{end}}
-</div>
-</div>
-
-{{else}}
-<div class="headbanner">Schon {{len .Messages}} Nachrichten
-<a href="/reset">Reset</a>
-<a href="/poem">Poem</a>
-</div>
-
-
-<form method="POST" class="container">
-    <label>Nachrichten:</label><br />
-    <textarea name="message"></textarea><br />
-    <label>Wie viele Zeilen soll dein Dada-Gedicht haben?</label><br />
-    <input id="linesInput" name="lines" type="range" min="1" max="50" step="1.0" value="5" /><br />
-    <p><output id="linesValueOutput" >5</output></p>
-    <input type="submit">
-    <script>
-        const value = document.querySelector("#linesValueOutput");
-        const input = document.querySelector("#linesInput");
-        input.addEventListener("input", (event) => {
-            value.textContent = event.target.value;
-        });
-    </script>
-</form>
-{{end}}
+    <div class="container">
+      <h2>Reseted</h2>
+    </div>
+    <h2><a href="/">Zurück</a></h2>
